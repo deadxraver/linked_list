@@ -81,8 +81,16 @@ public:
   }
 
   void remove_at(std::size_t index) {
-    // TODO:
-    throw std::logic_error("remove_at not implemented yet");
+    std::size_t i = 0;
+    for (list_node* p = this->data_.get(), * prev = nullptr; p != nullptr; prev = p, p = p->next.get(), ++i) {
+      if (i == index) {
+        remove_next(prev);
+        return;
+      }
+    }
+    throw std::out_of_range(
+        "index " + std::to_string(index) + " out of bounds for size " + std::to_string(this->size())
+        );
   }
 
   void remove(T value) {

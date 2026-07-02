@@ -23,5 +23,15 @@ int main(void) {
   } catch (std::logic_error e) {
     std::cerr << e.what() << std::endl;
   }
+  ll.push(0);
+  ll.push(1);
+  std::cout << ll << std::endl;
+  ll.remove_at(1);
+  std::cout << ll << std::endl;
+  try {
+    ll.remove_at(ll.size());
+  } catch (std::logic_error e) {
+    std::cerr << e.what() << std::endl;
+  }
   return 0;
 }
