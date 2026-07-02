@@ -19,13 +19,16 @@ private:
   private:
     list_node* node_;
   public:
+    using value_type = T;
+    using reference = T&;
+    using pointer = T*;
     using difference_type = std::ptrdiff_t;
     using iterator_category = std::forward_iterator_tag;
     explicit linked_list_iterator(list_node* node) : node_(node) {}
-    T& operator*() {
+    reference operator*() {
       return node_->value;
     }
-    T* operator->() {
+    pointer operator->() {
       return &node_->value;
     }
     linked_list_iterator& operator++() {
@@ -33,7 +36,7 @@ private:
       return *this;
     }
     linked_list_iterator operator++(int) {
-      iterator tmp(*this);
+      linked_list_iterator tmp(*this);
       ++(*this);
       return tmp;
     }
@@ -93,7 +96,7 @@ public:
 
   const T& operator[](std::size_t i) const {
     std::size_t idx = i;
-    for (list_node* p = this->data_.get(); p != nullptr; p = p->next.get(), --i) {
+    for (const list_node* p = this->data_.get(); p != nullptr; p = p->next.get(), --i) {
       if (i == 0)
         return p->value;
     }
