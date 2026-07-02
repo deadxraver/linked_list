@@ -14,6 +14,11 @@ private:
     std::unique_ptr<list_node> next;
   };
   std::unique_ptr<list_node> data_;
+  static void remove_next(list_node* node) {
+    if (node == nullptr || node->next == nullptr)
+      return;
+    node->next = std::move(node->next->next);
+  }
 
 public:
   explicit linked_list() : data_(nullptr) {}
@@ -58,7 +63,12 @@ public:
   }
 
   void remove(T value) {
-    // TODO:
-    throw std::logic_error("remove not implemented yet");
+    for (list_node* p = this->data_.get(), * prev = nullptr; p != nullptr; prev = p, p = p->next.get()) {
+      if (p->value == value) {
+        remove_next(prev);
+        return;
+      }
+    }
+    throw std::logic_error("failed to remove: element not found");
   }
 };
