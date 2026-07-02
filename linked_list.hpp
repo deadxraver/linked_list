@@ -22,7 +22,7 @@ private:
         this->data_ = std::move(this->data_->next);
       return;
     }
-    if (node == nullptr || node->next == nullptr)
+    if (node->next == nullptr)
       return;
     node->next = std::move(node->next->next);
   }
@@ -54,11 +54,26 @@ public:
     throw std::out_of_range("index " + std::to_string(idx) + " out of range for size " + std::to_string(size()));
   }
 
-  void push(T value) {
+  const T& operator[](std::size_t i) const {
+    std::size_t idx = i;
+    for (list_node* p = this->data_.get(); p != nullptr; p = p->next.get(), --i) {
+      if (i == 0)
+        return p->value;
+    }
+    throw std::out_of_range("index " + std::to_string(idx) + " out of range for size " + std::to_string(size()));
+  }
+
+  void push(const T& value) {
     this->data_ = std::make_unique<list_node>(value, std::move(this->data_));
   }
 
   T& top() {
+    if (this->data_.get() == nullptr)
+      throw std::out_of_range("cannot get top element from empty list");
+    return this->data_->value;
+  }
+
+  const T& top() const {
     if (this->data_.get() == nullptr)
       throw std::out_of_range("cannot get top element from empty list");
     return this->data_->value;
@@ -70,7 +85,7 @@ public:
     remove_next();
   }
 
-  void push_back(T val) {
+  void push_back(const T& val) {
     list_node* p = this->data_.get();
     if (p == nullptr) {
       this->data_ = std::make_unique<list_node>(val);
@@ -93,7 +108,7 @@ public:
         );
   }
 
-  void remove(T value) {
+  void remove(const T& value) {
     for (list_node* p = this->data_.get(), * prev = nullptr; p != nullptr; prev = p, p = p->next.get()) {
       if (p->value == value) {
         remove_next(prev);
