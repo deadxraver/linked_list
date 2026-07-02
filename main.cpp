@@ -35,5 +35,11 @@ int main(void) {
   } catch (std::logic_error e) {
     std::cerr << e.what() << std::endl;
   }
+  std::cout << ll << std::endl;
+  std::cout << "And some iterator!\n";
+  for (auto& el : ll) {
+    std::cout << el << ' ';
+  }
+  std::cout << std::endl;
   return 0;
 }

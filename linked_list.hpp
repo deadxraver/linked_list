@@ -15,6 +15,35 @@ private:
     T value;
     std::unique_ptr<list_node> next;
   };
+  class linked_list_iterator {
+  private:
+    list_node* node_;
+  public:
+    using difference_type = std::ptrdiff_t;
+    using iterator_category = std::forward_iterator_tag;
+    explicit linked_list_iterator(list_node* node) : node_(node) {}
+    T& operator*() {
+      return node_->value;
+    }
+    T* operator->() {
+      return &node_->value;
+    }
+    linked_list_iterator& operator++() {
+      node_ = node_->next.get();
+      return *this;
+    }
+    linked_list_iterator operator++(int) {
+      iterator tmp(*this);
+      ++(*this);
+      return tmp;
+    }
+    bool operator==(const linked_list_iterator& other) const {
+      return node_ == other.node_;
+    }
+    bool operator!=(const linked_list_iterator& other) const {
+      return !(*this == other);
+    }
+  };
   std::unique_ptr<list_node> data_;
   void remove_next(list_node* node = nullptr) {
     if (node == nullptr) {
@@ -28,6 +57,14 @@ private:
   }
 
 public:
+  using iterator = linked_list_iterator;
+  linked_list_iterator begin() {
+    return linked_list_iterator(this->data_.get());
+  }
+
+  linked_list_iterator end() {
+    return linked_list_iterator(nullptr);
+  }
   explicit linked_list() : data_(nullptr) {}
   friend std::ostream& operator<<(std::ostream& os, const linked_list& ll) {
     os << "{";
