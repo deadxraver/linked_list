@@ -8,6 +8,9 @@ int main(void) {
   std::cout << ll << std::endl;
   std::cout << ll[0] << ' ' << ll[1] << std::endl;
   std::cout << ll.size() << std::endl;
+  ll.push(1111);
+  std::cout << ll.top() << ", " << ll << std::endl;
+  ll.pop();
   ll.remove(42);
   std::cout << ll << std::endl;
   try {
